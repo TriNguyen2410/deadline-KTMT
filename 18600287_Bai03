@@ -1,0 +1,66 @@
+.data
+tb1: .asciiz "Nhap n: "
+LaCP: .asciiz " la so chinh phuong"
+KoLaCP: .asciiz " khong la chinh phuong"
+
+.text
+
+#Xuat tb1.
+li $v0, 4
+la $a0, tb1
+syscall
+
+#Nhap n
+li $v0, 5
+syscall
+
+#gan lai cho t1
+move $t1, $v0
+
+#=======Kiem tra chinh phuong========
+li $t3, 1
+
+#kiem tra.
+_Lap_KTCP:
+mult $t3, $t3
+mflo $t4
+
+beq $t4, $t1, _LaCP
+j KTCP_TangI
+
+KTCP_TangI:
+addi $t3, $t3, 1
+slt $t4, $t3, $t1
+beq $t4, 1, _Lap_KTCP
+j _KoLaCP
+
+_LaCP:
+#Xuat n
+li $v0, 1
+move $a0, $t1
+syscall
+
+#Xuat LaCP
+li $v0, 4
+la $a0, LaCP
+syscall
+
+li $v0, 10
+syscall
+
+_KoLaCP:
+#Xuat n
+li $v0, 1
+move $a0, $t1
+syscall
+
+#Xuat KoLaCP
+li $v0, 4
+la $a0, KoLaCP
+syscall
+
+li $v0, 10
+syscall
+
+
+

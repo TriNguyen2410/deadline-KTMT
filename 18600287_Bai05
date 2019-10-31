@@ -1,0 +1,81 @@
+.data
+	tb1: .asciiz "Nhap n: "
+	tb2: .asciiz "Nhap mang cac so nguyen: "
+	tb3: .asciiz "Mang vua nhap la: "
+	array: .word 100
+.text
+	#Xuat tb1
+	li $v0,4
+	la $a0,tb1
+	syscall
+
+	#nhap so n
+	li,$v0, 5
+	syscall
+
+	#gan vao t7
+	move $t7, $v0
+	
+	#gan i = 0
+	li $t1, 0
+	
+	#Load mang vao $t0
+	la $t0, array
+
+	#Xuat tb2
+	li $v0, 4
+	la $a0, tb2
+	syscall
+
+_Lap:
+	#nhap den khi i < n
+	li $v0, 5
+	syscall
+	sw $v0, ($t0)		#Luu vao trong mang so nguyen.
+	
+	#Tang i.
+	addi $t1, $t1, 1
+	addi $t0, $t0, 4
+	blt $t1, $t7, _Lap
+	j _Xuat
+
+_Xuat:
+	#gan j = 0 va load array vao a1.
+	li $t2, 0
+	la $a1, array
+	
+	#Xuat tb3
+	li $v0, 4
+	la $a0, tb3
+	syscall
+	
+_LapXuat:
+
+	#load va xuat array[i]
+	lw $a0, ($a1)
+	
+	#Xuat ki tu do
+	li $v0, 1
+	move $a0, $a0
+	syscall
+	
+	#Xuat khoang trang
+	addi $a0, $zero, 0x20	#a0 truy cap den dia chi 0x20(dia chi chua khoang trang)
+	addi $v0, $zero, 11 	#Xuat khoang trang
+	syscall
+
+	#tang i
+	addi $t2, $t2, 1
+	add $a1, $a1, 4		#Tang o nho
+
+	blt $t2,$t7,_LapXuat
+	j _Exit
+
+_Exit:
+	li $v0, 10
+	syscall
+	
+	 
+	
+
+	

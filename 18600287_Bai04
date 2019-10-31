@@ -1,0 +1,74 @@
+.data
+tb1: .asciiz "Nhap n: "
+LaDX: .asciiz " la so doi xung"
+KoLaDX: .asciiz " khong la doi xung"
+.text
+#Xuat tb1.
+li $v0, 4
+la $a0, tb1
+syscall
+
+#Nhap n
+li $v0, 5
+syscall
+
+#gan lai cho t1
+move $t1, $v0
+
+#=======Kiem tra doi xung========
+li $t2, 0 #tong
+li $t3, 10 #gan lay so de chia = 10
+move $t7, $t1 #gan t1 cho t7 de thao tac ma khong bi mat digit.
+_Lap_KTDX:
+#lay chu so cuoi cung va luu trong t4
+div $t7, $t3
+mfhi $t4
+
+#lay so moi la so chia phan nguyen cho 10 de thao tac
+mflo $t5 #t5 giu phan nguyen cua so moi khi chia het cho 10
+
+#nhan tong cho 10
+mult $t2, $t3
+mflo $t2 #luu tong vua nhan vs 10 va chinh tong do
+
+#cong phan du va cong vao tong.
+add $t2, $t2, $t4
+
+#gan lai cho so t7 la gia tri chia lay phan nguyen.
+move $t7, $t5
+
+#kiem tra so do co bang 0 hay khong.
+beq $t5, 0, _KiemTraDX
+j _Lap_KTDX
+
+#Kiem tra tong vua tinh voi so ban dau.
+_KiemTraDX:
+beq $t2, $t1, KTDX_LaDX
+j KTDX_KoLaDX
+
+KTDX_LaDX:
+
+#Xuat n
+li $v0, 1
+move $a0, $t1
+syscall
+
+#Xuat tb2
+li $v0, 4
+la $a0, LaDX
+syscall
+
+#exit
+li $v0, 10
+syscall
+
+KTDX_KoLaDX:
+#Xuat n
+li $v0, 1
+move $a0, $t1
+syscall
+
+#Xuat tb2
+li $v0, 4
+la $a0, KoLaDX
+syscall

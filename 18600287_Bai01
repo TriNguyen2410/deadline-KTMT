@@ -1,0 +1,64 @@
+.data
+tb1: .asciiz "Nhap n: "
+LaNT: .asciiz " la so nguyen to"
+KoLaNT: .asciiz " khong la nguyen to"
+.text
+#Xuat tb1.
+li $v0, 4
+la $a0, tb1
+syscall
+
+#Nhap n
+li $v0, 5
+syscall
+
+#gan lai cho t1
+move $t1, $v0
+
+#=======Kiem tra nguyen to========
+#gan i = 1
+li $t0, 1
+li $t2, 0 #gan t2 = 0
+_Lap_KTNT:
+
+div $t1, $t0
+mfhi $t3
+beq $t3, 0, KTNT_TangDem
+j KTNT_TangI
+
+KTNT_TangDem:
+addi $t2, $t2, 1
+
+KTNT_TangI:
+addi $t0, $t0, 1
+sle $t4, $t0, $t1
+beq $t4, 1, _Lap_KTNT
+j KiemTraDem2
+KiemTraDem2:
+beq $t2, 2, _LaNT
+j _KoLaNT
+_LaNT:
+
+#Xuat n
+li $v0, 1
+move $a0, $t1
+syscall
+
+#Xuat tb2
+li $v0, 4
+la $a0, LaNT
+syscall
+
+#exit
+li $v0, 10
+syscall
+_KoLaNT:
+#Xuat n
+li $v0, 1
+move $a0, $t1
+syscall
+
+#Xuat tb2
+li $v0, 4
+la $a0, KoLaNT
+syscall
